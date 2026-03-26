@@ -73,15 +73,16 @@ jobs:
             exit 1
           fi
 
-      - name: Submit Spark job to Dataproc
+      - name: Submit Spark job to Dataproc asynchronously
         run: |
           gcloud dataproc jobs submit spark \
+            --async \
             --project="$PROJECT_ID" \
             --region="$REGION" \
             --cluster="$CLUSTER_NAME" \
             --class=com.loganalytics.Main \
             --jars="gs://${BUCKET_NAME}/jars/${JAR_NAME}" \
-            --properties=spark.driver.memory=4g,spark.executor.memory=4g,spark.executor.cores=2,spark.sql.adaptive.enabled=false,spark.sql.maxPlanStringLength=10000 \
+            --properties=spark.driver.memory=2g,spark.executor.memory=2g,spark.executor.cores=1,spark.sql.adaptive.enabled=false,spark.sql.maxPlanStringLength=10000 \
             -- \
             --logs "gs://${BUCKET_NAME}/data/logs.parquet" \
             --deployments "gs://${BUCKET_NAME}/data/deployments.parquet" \
@@ -92,4 +93,4 @@ jobs:
             --attribution-window-hours 6 \
             --baseline-hours 24 \
             --salt-buckets 16 \
-            --target-partitions 64
+            --target-partitions 16
