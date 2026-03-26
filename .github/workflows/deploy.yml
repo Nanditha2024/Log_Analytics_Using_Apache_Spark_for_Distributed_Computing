@@ -34,7 +34,7 @@ jobs:
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v3
         with:
-          version: '>= 363.0.0'
+          version: ">= 363.0.0"
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -83,13 +83,13 @@ jobs:
             --jars="gs://${BUCKET_NAME}/jars/${JAR_NAME}" \
             --properties=spark.driver.memory=4g,spark.executor.memory=4g,spark.executor.cores=2,spark.sql.adaptive.enabled=false,spark.sql.maxPlanStringLength=10000 \
             -- \
-            --logs="gs://${BUCKET_NAME}/data/logs.parquet" \
-            --deployments="gs://${BUCKET_NAME}/data/deployments.parquet" \
-            --host-meta="gs://${BUCKET_NAME}/data/host_meta.parquet" \
-            --output="gs://${BUCKET_NAME}/output" \
-            --input-format=parquet \
-            --session-timeout-minutes=30 \
-            --attribution-window-hours=6 \
-            --baseline-hours=24 \
-            --salt-buckets=16 \
-            --target-partitions=64
+            --logs "gs://${BUCKET_NAME}/data/logs.parquet" \
+            --deployments "gs://${BUCKET_NAME}/data/deployments.parquet" \
+            --host-meta "gs://${BUCKET_NAME}/data/host_meta.parquet" \
+            --output "gs://${BUCKET_NAME}/output" \
+            --input-format parquet \
+            --session-timeout-minutes 30 \
+            --attribution-window-hours 6 \
+            --baseline-hours 24 \
+            --salt-buckets 16 \
+            --target-partitions 64
