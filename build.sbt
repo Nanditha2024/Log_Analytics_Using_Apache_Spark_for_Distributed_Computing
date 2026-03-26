@@ -4,6 +4,7 @@ ThisBuild / scalaVersion := "2.12.18"
 lazy val root = (project in file("."))
   .settings(
     name := "distributed-log-analytics-spark",
+
     Compile / run / fork := true,
     Compile / run / outputStrategy := Some(StdoutOutput),
     Compile / run / javaOptions ++= Seq(
@@ -23,8 +24,11 @@ lazy val root = (project in file("."))
       "--add-opens=java.base/sun.security.action=ALL-UNNAMED",
       "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED"
     ),
+
     libraryDependencies ++= Seq(
-      "org.apache.spark" %% "spark-sql" % "3.5.1",
-      "org.apache.spark" %% "spark-core" % "3.5.1"
-    )
+      "org.apache.spark" %% "spark-sql" % "3.5.1" % "provided",
+      "org.apache.spark" %% "spark-core" % "3.5.1" % "provided"
+    ),
+
+    Compile / mainClass := Some("com.loganalytics.Main")
   )
