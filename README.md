@@ -96,6 +96,46 @@ Pipeline writes parquet outputs under `--output`:
 - `top_offenders/`
 - `skew_study/`
 
+## Visualize Metrics In GCP (BigQuery + Charts)
+
+After Dataproc writes parquet outputs to GCS, you can create BigQuery external tables and chart-ready views directly from Cloud Shell.
+
+### 1) Run visualization setup in Cloud Shell
+
+```bash
+git clone https://github.com/Nanditha2024/Log_Analytics_Using_Apache_Spark_for_Distributed_Computing.git
+cd Log_Analytics_Using_Apache_Spark_for_Distributed_Computing
+
+chmod +x scripts/setup_bigquery_visualization.sh
+
+PROJECT_ID=project-34c13448-074a-417a-b64 \
+BUCKET_NAME=vinay-log-dataproc-6731 \
+REGION=northamerica-northeast1 \
+BQ_DATASET=log_analytics \
+./scripts/setup_bigquery_visualization.sh
+```
+
+### 2) Open chart-ready views in BigQuery Studio
+
+Use these views to create line/bar charts in BigQuery Studio (or Looker Studio):
+
+- `project-34c13448-074a-417a-b64.log_analytics.vw_slo_trends`
+- `project-34c13448-074a-417a-b64.log_analytics.vw_anomaly_timeline`
+- `project-34c13448-074a-417a-b64.log_analytics.vw_deployment_impact`
+- `project-34c13448-074a-417a-b64.log_analytics.vw_top_offenders`
+- `project-34c13448-074a-417a-b64.log_analytics.vw_skew_benchmark`
+
+### 3) Optional quick validation query
+
+```bash
+bq query --use_legacy_sql=false \
+'SELECT service, endpoint, ROUND(AVG(p95_latency_ms),2) AS avg_p95_ms
+ FROM `project-34c13448-074a-417a-b64.log_analytics.vw_slo_trends`
+ GROUP BY service, endpoint
+ ORDER BY avg_p95_ms DESC
+ LIMIT 20'
+```
+
 ## Scaling + Skew Study
 
 Use:
