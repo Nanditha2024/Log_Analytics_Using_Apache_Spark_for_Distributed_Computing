@@ -12,7 +12,7 @@ permissions:
 env:
   PROJECT_ID: project-34c13448-074a-417a-b64
   REGION: northamerica-northeast1
-  CLUSTER_NAME: ecommerce-cluster
+  CLUSTER_NAME: distributed-system
   BUCKET_NAME: vinay-log-dataproc-6731
   JAR_NAME: distributed-log-analytics-spark-assembly-0.1.0.jar
 
@@ -72,6 +72,11 @@ jobs:
             echo "data folder not found"
             exit 1
           fi
+
+      - name: Validate Dataproc cluster and GCS bucket
+        run: |
+          gcloud dataproc clusters describe "$CLUSTER_NAME" --region "$REGION" --project "$PROJECT_ID" >/dev/null
+          gcloud storage ls "gs://${BUCKET_NAME}" >/dev/null
 
       - name: Submit Spark job to Dataproc asynchronously
         run: |
