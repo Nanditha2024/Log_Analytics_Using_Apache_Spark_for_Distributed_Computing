@@ -21,16 +21,33 @@ object Main {
         System.err.println(error)
         printUsageAndExit()
       case Right(config) =>
-        val spark = SparkSession.builder()
+        val sparkMaster = sys.props.get("spark.master")
+        val builder = SparkSession.builder()
           .appName("DistributedLogAnalytics")
-          .master(sys.props.getOrElse("spark.master", "local[*]"))
           .config("spark.sql.legacy.parquet.nanosAsLong", "true")
           .config("spark.sql.shuffle.partitions", config.targetPartitions)
           .config("spark.default.parallelism", config.targetPartitions)
-          .config("spark.driver.bindAddress", "127.0.0.1")
-          .config("spark.driver.host", "127.0.0.1")
-          .config("spark.local.ip", "127.0.0.1")
-          .getOrCreate()
+
+        // In Dataproc/YARN cluster mode, forcing localhost makes executors unable
+        // to connect back to the driver. Keep localhost-only networking for local runs.
+        val spark = sparkMaster match {
+          case Some(master) if master.startsWith("local") =>
+            builder
+              .master(master)
+              .config("spark.driver.bindAddress", "127.0.0.1")
+              .config("spark.driver.host", "127.0.0.1")
+              .config("spark.local.ip", "127.0.0.1")
+              .getOrCreate()
+          case Some(master) =>
+            builder.master(master).getOrCreate()
+          case None =>
+            builder
+              .master("local[*]")
+              .config("spark.driver.bindAddress", "127.0.0.1")
+              .config("spark.driver.host", "127.0.0.1")
+              .config("spark.local.ip", "127.0.0.1")
+              .getOrCreate()
+        }
         spark.sparkContext.setLogLevel("WARN")
         log("Spark session initialized")
 
