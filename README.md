@@ -14,7 +14,7 @@ The pipeline is designed to demonstrate the use of distributed computing for:
 
 The application reads structured input data, enriches it with host metadata, computes multiple analytics products, prints summaries to the console, and writes parquet outputs that can be used locally or registered in BigQuery for visualization.
 
-## 2. What This Project Solves
+## 2. What Problem This Project Solves
 
 In real systems, raw logs are large, noisy, and difficult to interpret manually. This project transforms those logs into structured outputs so that a reviewer can answer questions such as:
 
@@ -170,7 +170,7 @@ This produces a JAR under `target/scala-2.12/`.
 
 ### Step 4: Run the local pipeline
 
-You can either run the helper script:
+This can run the helper script:
 
 ```bash
 ./scripts/run_local.sh
@@ -197,7 +197,7 @@ spark-submit \
 
 After the run finishes, inspect the `output/` directory for parquet results and review the console summaries.
 
-## 9. How To Run On Dataproc Or A Spark Cluster
+## 9. How To Run On Dataproc 
 
 For larger datasets, the project is designed to run on a Spark cluster such as Google Cloud Dataproc.
 
@@ -222,7 +222,7 @@ The repository includes helper scripts that create BigQuery external tables and 
 - [`scripts/run_cicd_dataproc_bigquery.sh`](scripts/run_cicd_dataproc_bigquery.sh)
 - [`scripts/setup_bigquery_visualization.sh`](scripts/setup_bigquery_visualization.sh)
 
-These scripts are optional, but they are useful if you want to publish the outputs for dashboards or report screenshots.
+These scripts are optional, but they are useful if we want to publish the outputs for dashboards or report screenshots.
 
 ## 10. Configuration Reference
 
@@ -286,7 +286,7 @@ The job writes outputs in overwrite mode, so an existing output directory should
 
 ## 13. Quick Start
 
-If you only want the shortest path to a working run:
+To test quickly:
 
 ```bash
 git clone https://github.com/Nanditha2024/Log_Analytics_Using_Apache_Spark_for_Distributed_Computing.git
